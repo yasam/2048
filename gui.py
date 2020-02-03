@@ -33,7 +33,7 @@ class GameGui(GM2048):
 	def update_cell(self, row, col):
 		if self.app == None:
 			return
-		fgcolors = ["","green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red"]
+		fgcolors = ["","green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red", "green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red"]
 		cell = self.get_cell(row, col)
 
 		# default state is closed
@@ -57,6 +57,8 @@ class GameGui(GM2048):
 			lbl.config(text = "")
 		else:
 			lbl.config(text = str(val))
+
+		self.app.setTitle(str(self.get_points()))
 
 	def verbose(self, enable):
 		self.draw_board(enable)

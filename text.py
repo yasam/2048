@@ -15,7 +15,7 @@ def getch(char_width=1):
         old_settings = termios.tcgetattr(fd)
         try:
                 tty.setraw(fd)
-                ch = sys.stdin.read(char_width)
+                ch = sys.stdin.read(3)
         finally:
                 termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
@@ -65,22 +65,21 @@ class GameText(GM2048):
 
 			print(row)
 
-	def read_action2(self):
-                print("Use arrows:")
-                keycode = ord(getch())
-
-                print(keycode)
-                #if keycode == 27: # ESC
-                #        return ACTION_EXIT
-
-                if keycode == 27:
-                        keycode = ord(getch())
-                        print(keycode)
-                        if keycode == 91:
+	def read_action_arrows(self):
+                while True:
+                	print("Use arrows(<ESC><ESC><ESC> to exit):")
+                	keycode = getch()
+                	if keycode == '\x1b[A':
                                 return ACTION_UP
-                        
-                        if keycode == 80:
+                	if keycode == '\x1b[B':
                                 return ACTION_DOWN
+                	if keycode == '\x1b[C':
+                                return ACTION_RIGHT
+                	if keycode == '\x1b[D':
+                                return ACTION_LEFT
+                	if keycode == '\x1b\x1b\x1b':
+                                return ACTION_EXIT
+                	print("Invalid keycode:"+keycode)
 
 	def read_action(self):
 		actions = [ACTION_UP, ACTION_DOWN, ACTION_LEFT, ACTION_RIGHT, ACTION_EXIT]
@@ -96,7 +95,7 @@ class GameText(GM2048):
 	def play(self):
 		while True:
 			self.print_board()
-			action = self.read_action();
+			action = self.read_action_arrows();
 
 			if action == ACTION_UP:
                                 self.move_up()
