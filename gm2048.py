@@ -91,13 +91,13 @@ class GM2048:
 
 	def get_empty_cell(self):
                 if self.val_count == self.row_count * self.col_count:
-                        return None
+                        return [None, 0, 0]
                 
                 while True:
                         row = random.randint(0, self.row_count-1)
                         col = random.randint(0, self.col_count-1)
                         if self.board[row][col].value() == 0:
-                                return self.board[row][col]
+                                return [self.board[row][col], row, col]
                         
 	def swap(self, row1, col1, row2, col2):
                 a = self.get_cell(row1, col1)
@@ -113,13 +113,14 @@ class GM2048:
                 self.board[row2][col2] = a
 
 	def put_new_value(self):
-                c = self.get_empty_cell()
+                [c, row, col] = self.get_empty_cell()
                 if c == None:
                         self.message("Game over!")
                         return False
                 
                 c.set(self.generate_value())
                 self.val_count += 1
+                self.update_cell(row, col)
                 return True
 
 	def get_prev_idx(self, idx, is_forward):
@@ -165,8 +166,10 @@ class GM2048:
 
                 if prev.value() == 0:
                         self._is_moved = True
-                        self.debug("swap (" + str(row_prev_idx) + ", " + str(col_prev_idx) + ":"+str(prev.value())+") <--> (" + str(row) + ", " + str(col) + ":"+str(cur.value())+")")
+                        #self.debug("swap (" + str(row_prev_idx) + ", " + str(col_prev_idx) + ":"+str(prev.value())+") <--> (" + str(row) + ", " + str(col) + ":"+str(cur.value())+")")
                         self.swap(row_prev_idx, col_prev_idx, row, col)
+                        self.update_cell(row_prev_idx, col_prev_idx)
+                        self.update_cell(row, col)
                         self.shift(row_prev_idx, col_prev_idx, is_vertical, is_forward)
                         return
 

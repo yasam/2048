@@ -6,20 +6,22 @@ from tkinter import messagebox
 
 from gm2048 import *
 
-def mouse_left_click( event ):
-	game.mouse_left_click(event)
 
-def mouse_right_click( event ):
-	game.mouse_right_click(event)
+def rightKey(key):
+	game.right_key()
 
-def verbose_left_click( event ):
-	game.verbose(True)
+def leftKey(key):
+	game.left_key()
 
-def verbose_right_click( event ):
-	game.verbose(False)
+def upKey(key):
+	game.up_key()
 
-class GameGui(MineSweeper):
+def downKey(key):
+	game.down_key()
+
+class GameGui(GM2048):
 	def __init__(self, size):
+		self.app = None
 		return GM2048.__init__(self, size)
 
 	def get_cell_name(self, row, col):
@@ -29,6 +31,8 @@ class GameGui(MineSweeper):
 		messagebox.showinfo("2048", msg)
 
 	def update_cell(self, row, col):
+		if self.app == None:
+			return
 		fgcolors = ["","green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red"]
 		cell = self.get_cell(row, col)
 
@@ -49,7 +53,10 @@ class GameGui(MineSweeper):
 
 		self.app.setLabelBg(l, bgcolor)
 		lbl.config(relief=relief)
-		lbl.config(text = str(val))
+		if val == 0:
+			lbl.config(text = "")
+		else:
+			lbl.config(text = str(val))
 
 	def verbose(self, enable):
 		self.draw_board(enable)
@@ -62,12 +69,20 @@ class GameGui(MineSweeper):
                         self.message("You won!!!")
                         self.app.stop()
 
-	def mouse_left_click(self, event):
+	def left_key(self):
+		self.move_left()
+		self.finalize_event()
+
+	def right_key(self):
+		self.move_right()
+		self.finalize_event()
+
+	def up_key(self):
 		self.move_up()
 		self.finalize_event()
 
 
-	def mouse_right_click(self, event):
+	def down_key(self):
 		self.move_down()
 		self.finalize_event()
 
@@ -82,23 +97,24 @@ class GameGui(MineSweeper):
 				self.app.setLabelHeight(l, 40)
 
 				lbl.config(borderwidth=2, relief="raised")
-				lbl.bind( "<Button-1>", mouse_left_click )
-				lbl.bind( "<Button-3>", mouse_right_click )
 				lbl.row = i
 				lbl.col = j
 
 
 	def draw_board(self, is_real = False):
-		self.update_count()
 		for i in range(self.row_count):
 			for j in range(self.col_count):
 				self.update_cell(i, j)
 	def play(self):
-		width = (self.col_count + 4) * 40
+		width = (self.col_count) * 40
 		height = (self.row_count) * 40
 		self.app = gui("2048 by yasam", str(width)+"x"+str(height), handleArgs=False)
 		self.app.setSticky("news")
 		self.app.setExpand("both")
+		self.app.bindKey('<Left>', leftKey)
+		self.app.bindKey('<Right>', rightKey)
+		self.app.bindKey('<Up>', upKey)
+		self.app.bindKey('<Down>', downKey)
 		self.create_board()
 		self.draw_board()
 		self.app.go()
