@@ -3,12 +3,13 @@
 import sys
 import random
 import copy
+import math
 
 class Cell:
 	def __init__(self):
                 self._value = 0
                 self._combined = False
-                self._color_idx = 1;
+                self._color_idx = 0;
 
 	def add(self, v):
                 self._value += v
@@ -16,14 +17,13 @@ class Cell:
                 self._color_idx += 1
 
 	def set(self, v):
-                if v == 4:
-                        self._color_idx += 1
+                self._color_idx = math.log(v, 2)
                 self._value = v
 
 	def clear(self):
                 self._value = 0
                 self._combined = False
-                self._color_idx = 1
+                self._color_idx = 0
 
 	def value(self):
                 return self._value
@@ -35,7 +35,7 @@ class Cell:
                 self._combined = False
 
 	def get_color_idx(self):
-                return self._color_idx
+                return int(self._color_idx)
 
 class GM2048:
 	def __init__(self, size):
@@ -112,13 +112,15 @@ class GM2048:
                 self.board[row1][col1] = b
                 self.board[row2][col2] = a
 
-	def put_new_value(self):
+	def put_new_value(self, value = 0):
                 [c, row, col] = self.get_empty_cell()
                 if c == None:
                         self.message("Game over!")
                         return False
                 
-                c.set(self.generate_value())
+                if value == 0:
+                        value = self.generate_value()
+                c.set(value)
                 self.val_count += 1
                 self.update_cell(row, col)
                 return True

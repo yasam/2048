@@ -33,31 +33,29 @@ class GameGui(GM2048):
 	def update_cell(self, row, col):
 		if self.app == None:
 			return
-		fgcolors = ["","green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red", "green", "yellow", "blue", "purple", "navy", "orange", "maroon", "red"]
+		bgcolors = ["LightGrey","#88dd88", "#11bb11", "#ddcc00", "orange", "#ff8888", "#bb0000", "#88aaff", "#0044cc",  "green", "blue", "red", "purple", "yellow"]
 		cell = self.get_cell(row, col)
+		#bgcolor = "DarkGrey"
 
 		# default state is closed
-		bgcolor = "DarkGrey"
-		relief = "raised"
 		val = cell.value()
 
-		bgcolor = "LightGrey"
 		relief = "sunken"
 
 		l = self.get_cell_name(row, col)
 		lbl = self.app.getLabelWidget(l)
 
-		fgcolor = fgcolors[cell.get_color_idx()]
-		if fgcolor != "":
-			self.app.setLabelFg(l, fgcolor)
+		bgcolor = bgcolors[cell.get_color_idx()]
 
-		self.app.setLabelBg(l, bgcolor)
-		lbl.config(relief=relief)
 		if val == 0:
 			lbl.config(text = "")
 		else:
+			relief = "raised"
 			lbl.config(text = str(val))
-
+		fgcolor = "White"
+		self.app.setLabelFg(l, fgcolor)
+		self.app.setLabelBg(l, bgcolor)
+		lbl.config(relief=relief)
 		self.app.setTitle(str(self.get_points()))
 
 	def verbose(self, enable):
@@ -119,6 +117,19 @@ class GameGui(GM2048):
 		self.app.bindKey('<Down>', downKey)
 		self.create_board()
 		self.draw_board()
+		#self.put_new_value(2)
+		#self.put_new_value(4)
+		#self.put_new_value(8)
+		#self.put_new_value(16)
+		#self.put_new_value(32)
+		#self.put_new_value(64)
+		#self.put_new_value(128)
+		#self.put_new_value(256)
+		#self.put_new_value(512)
+		#self.put_new_value(1024)
+		#self.put_new_value(2048)
+		#self.put_new_value(4096)
+		#self.put_new_value(8192)
 		self.app.go()
 
 def main():
