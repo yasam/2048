@@ -188,32 +188,37 @@ class GM2048:
                         self.val_count -= 1
                 
                 self.shift(row_next_idx, col_next_idx, is_vertical, is_forward)
-                
-	def move_up(self):
+	def action_start(self):
                 self.clear_combined()
                 self._is_moved = False
+
+	def action_end(self):
+                if self.is_moved():
+                        self.put_new_value()
+
+	def move_up(self):
+                self.action_start()
                 for i in range(0, self.col_count):
                         self.shift(0, i, True, True)
+                self.action_end()
 
 	def move_down(self):
-                self.clear_combined()
-                self._is_moved = False
+                self.action_start()
                 for i in range(0, self.col_count):
                         self.shift(self.row_count-1, i, True, False)
+                self.action_end()
 
 	def move_left(self):
-                self.clear_combined()
-                self._is_moved = False
-                for i in range(0, self.col_count):
+                self.action_start()
+                for i in range(0, self.row_count):
                         self.shift(i, 0, False, True)
+                self.action_end()
 
-        
 	def move_right(self):
-                self.clear_combined()
-                self._is_moved = False
-                for i in range(0, self.col_count):
+                self.action_start()
+                for i in range(0, self.row_count):
                         self.shift(i, self.col_count-1, False, False)
-
+                self.action_end()
 
 	def is_equal_cell(self, c1, c2):
                 if c1 == None:

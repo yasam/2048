@@ -62,9 +62,6 @@ class GameGui(GM2048):
 		self.draw_board(enable)
 
 	def finalize_event(self):
-                if self.is_moved():
-                        self.put_new_value()
-
                 if self.check_over() == True:
                         self.message("Game Over, total points:" + str(self.get_points()))
                         self.app.stop()
