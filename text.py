@@ -114,7 +114,7 @@ class GameText(GM2048):
                                 self.put_new_value()
 
 			if self.check_over() == True:
-                                self.message("Game Over!!!")
+                                self.message("Game Over, total points:"+str(self.get_points()))
                                 break
 
 		self.print_board()

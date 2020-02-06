@@ -66,7 +66,7 @@ class GameGui(GM2048):
                         self.put_new_value()
 
                 if self.check_over() == True:
-                        self.message("You won!!!")
+                        self.message("Game Over, total points:" + str(self.get_points()))
                         self.app.stop()
 
 	def left_key(self):

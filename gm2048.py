@@ -115,7 +115,6 @@ class GM2048:
 	def put_new_value(self, value = 0):
                 [c, row, col] = self.get_empty_cell()
                 if c == None:
-                        self.message("Game over!")
                         return False
                 
                 if value == 0:
@@ -216,10 +215,31 @@ class GM2048:
                         self.shift(i, self.col_count-1, False, False)
 
 
+	def is_equal_cell(self, c1, c2):
+                if c1 == None:
+                        return False
+                if c2 == None:
+                        return False
+                if c1.value() != c2.value():
+                        return False
+                return True
+
 	def check_over(self):
-                if self.get_empty_cell() == None:
-                        return True
-                return False
+                [c, row, col] = self.get_empty_cell()
+                if c != None:
+                        return False
+
+                for i in range(0, self.row_count):
+                        for j in range(0, self.col_count):
+                                cur = self.get_cell(i,j)
+                                nrow = self.get_cell(i, j+1)
+                                ncol = self.get_cell(i+1, j)
+                                if self.is_equal_cell(cur, nrow):
+                                        return False
+                                if self.is_equal_cell(cur, ncol):
+                                        return False
+
+                return True
 
 	def message(self, msg):
 		raise NotImplementedError("Subclass must implement abstract method!!!")
